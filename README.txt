@@ -20,7 +20,13 @@ Profile require is very easy to use: just insert
 require 'profile_require'
 
 somewhere near the beginning of your application (for example 
-test/test_helper.rb). In addition set the (shell) environment
+test/test_helper.rb if you are testing a rails app). 
+
+If ruby complains about not finding the file (no such file to load -- 
+profile_require (LoadError)) and you are using bundler, try to rerun
+the test with bundle exec.
+
+To actually enabling the profiling, set the (shell) environment 
 variable PROFILE_REQUIRE to a non-empty value:
 
 bash$ export PROFILE_REQUIRE=1
@@ -38,6 +44,17 @@ well as creating a file called profile-require-sorted with the
 sorted output (which in turn can be plotted with gnuplot, for example:
 
 bash$ gnuplot -e 'plot "profile-require-sorted"' -p 
+
+----
+
+Known issues
+
+If required from config/environment.rb the output eventually stops.
+Put the require line in the test_helper.rb instead.
+
+Note that if file A requires B and file B requires C the time
+for A requiring B includes the time spent in B requiring C, so
+the sum might be larger than the time spent in the application.
 
 ----
 
